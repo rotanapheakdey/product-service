@@ -1,0 +1,18 @@
+Step of implement spring boot
+1. - Entity
+  - Create ProductEntity
+2. - DTO
+  - Create Product Response
+  - Create Product Request
+3.- Create Mapper
+  - Mapper Request to Entity
+  - Mapper Entity to Response
+4.- Repository
+  - Create Method get all product from collections
+5.- Service
+  - Create Product service -> interface
+  - Create Product Service impl from product service
+  - Create get all products
+6.- Controllers
+  - Create Product Controller
+  - Method get all products
