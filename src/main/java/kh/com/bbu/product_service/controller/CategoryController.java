@@ -23,12 +23,8 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<?> createCategory(@RequestBody CategoryRequest request){
-        try {
-            categoryService.createCategory(request);
-        }catch (ApiException e){
-            return new ResponseEntity<>(new MessageResponse(null, false, e.getMessage(), e.getError()), HttpStatus.OK);
 
-        }
+        categoryService.createCategory(request);
         return new ResponseEntity<>(null, HttpStatus.OK);
 
     }
