@@ -3,6 +3,7 @@ package kh.com.bbu.product_service.service.impl;
 import kh.com.bbu.product_service.dto.request.ProductRequest;
 import kh.com.bbu.product_service.dto.response.ProductResponse;
 import kh.com.bbu.product_service.entities.ProductEntity;
+import kh.com.bbu.product_service.exceptions.ApiException;
 import kh.com.bbu.product_service.mappers.ProductMapper;
 import kh.com.bbu.product_service.repository.CategoryRepository;
 import kh.com.bbu.product_service.repository.ProductRepository;
@@ -36,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse getProductById(int id) {
         ProductEntity entity = productRepository.findById(id).orElse(null);
         if (entity == null){
-            throw new RuntimeException("Product not found!!");
+            throw new ApiException("400","Product not found!!");
         }
         return productMapper.toResponse(entity);
     }
