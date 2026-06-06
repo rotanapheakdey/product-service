@@ -2,17 +2,24 @@ package kh.com.bbu.product_service.service.impl;
 
 import kh.com.bbu.product_service.dto.request.ProductRequest;
 import kh.com.bbu.product_service.dto.response.ProductResponse;
+import kh.com.bbu.product_service.dto.response.ProductUnitResponse;
 import kh.com.bbu.product_service.entities.ProductEntity;
+import kh.com.bbu.product_service.entities.ProductUnit;
 import kh.com.bbu.product_service.exceptions.ApiException;
 import kh.com.bbu.product_service.mappers.ProductMapper;
+import kh.com.bbu.product_service.mappers.ProductUnitMapper;
 import kh.com.bbu.product_service.repository.CategoryRepository;
 import kh.com.bbu.product_service.repository.ProductRepository;
+import kh.com.bbu.product_service.repository.ProductUnitRepository;
+import kh.com.bbu.product_service.repository.ProductUnitViewRepository;
 import kh.com.bbu.product_service.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -22,6 +29,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
     private final CategoryRepository categoryRepository;
+    private final ProductUnitViewRepository productUnitViewRepository;
+//    private final ProductUnitMapper productUnitMapper;
     @Override
     public List<ProductResponse> getAllProducts(){
 //        List<ProductResponse> list = new ArrayList<>();
@@ -39,7 +48,10 @@ public class ProductServiceImpl implements ProductService {
         if (entity == null){
             throw new ApiException("400","Product not found!!");
         }
-        return productMapper.toResponse(entity);
+
+        var response = productMapper.toResponse(entity);
+        response.setProductUnitList(getAllProductUnitResponse(response.getId()));
+        return response;
     }
 
     @Override
@@ -71,6 +83,21 @@ public class ProductServiceImpl implements ProductService {
         return mapProductToResponseList(productRepository.findByCategory_Id(id));
     }
 
+    @Override
+    public ProductResponse getProductByBarcode(String barcode) {
+        if(Strings.isBlank(barcode)){
+            throw  new ApiException("400","Barcode is required");
+        }
+        var product = productRepository.findByBarcode(barcode);
+        if(Objects.isNull(product)){
+            throw new ApiException("400", "Product Not Found");
+        }
+
+        var response = productMapper.toResponse(product);
+        response.setProductUnitList(getAllProductUnitResponse(response.getId()));
+        return response;
+    }
+
     private List<ProductResponse> mapProductToResponseList(List<ProductEntity> list){
 
         List<ProductResponse> responseList= new ArrayList<>();
@@ -81,4 +108,12 @@ public class ProductServiceImpl implements ProductService {
         return responseList;
     }
 
+    private List<ProductUnitResponse> getAllProductUnitResponse(int productId){
+        List<ProductUnitResponse> productUnitResponseList = new ArrayList<>() ;
+        productUnitViewRepository.findAllByProductId(productId).forEach((data)->{
+            var productUnitResponse = ProductUnitMapper.toResponse(data);
+            productUnitResponseList.add(productUnitResponse);
+        });
+        return productUnitResponseList;
+    }
 }

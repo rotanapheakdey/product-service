@@ -3,6 +3,8 @@ package kh.com.bbu.product_service.dto.response;
 import kh.com.bbu.product_service.entities.CategoryEntity;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,4 +19,5 @@ public class ProductResponse {
     private Double discount;
     private String createdDate;
     private CategoryEntity category;
+    private List<ProductUnitResponse> productUnitList;
 }
