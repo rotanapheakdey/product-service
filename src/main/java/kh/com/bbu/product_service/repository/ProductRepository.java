@@ -14,4 +14,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     List<ProductEntity> findByCategory_Id(int categoryId);
     List<ProductEntity> findByCategory_IdOrderByIdDesc(int categoryId);
 
+    ProductEntity findByBarcode(String barcode);
 }

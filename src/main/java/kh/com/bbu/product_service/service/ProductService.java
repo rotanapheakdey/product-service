@@ -16,4 +16,5 @@ public interface ProductService {
 
     void delete(int id);
     List<ProductResponse> getAllProductsByCategoryId(int id);
+    ProductResponse getProductByBarcode(String barcode);
 }
