@@ -24,9 +24,10 @@ public class ProductEntity {
     private String description;
     private Double price;
     private Double discount;
-    @Column(name = "created_date")
+    @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
     private boolean deleted;
     @ManyToOne
     private CategoryEntity category;
+    private String barcode;
 }
